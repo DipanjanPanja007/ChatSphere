@@ -59,9 +59,7 @@ const Login = () => {
                 width={"100%"}
                 style={{ marginTop: 15 }}
                 onClick={submitHandler}
-            >
-                Login
-            </Button>
+            >Login</Button>
 
 
             <Button
