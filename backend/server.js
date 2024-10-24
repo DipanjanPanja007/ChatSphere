@@ -1,9 +1,10 @@
-const express = require("express")
-const dotenv = require("dotenv")
-const { chats } = require("./data/data.js")
-const connectDb = require("./config/db.js")
-const userRouter = require("./routes/user.route.js")
-const { notFound, errorHandler } = require("./middleware/error.middleware.js")
+import express from "express";
+import dotenv from "dotenv"
+import { connectDb } from './config/db.js';
+import userRouter from './routes/user.route.js';
+import { notFound, errorHandler } from './middleware/error.middleware.js';
+
+
 
 dotenv.config();
 
