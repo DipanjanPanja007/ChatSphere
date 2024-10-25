@@ -16,7 +16,10 @@ const app = express();
 app.use(cors({
     origin: "http://localhost:3000", // Replace with your frontend's URL
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-    credentials: true // If using cookies or auth headers
+    credentials: true, // If using cookies or auth headers
+    headers: {
+        "Content-Type": "multipart/form-data",
+    },
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

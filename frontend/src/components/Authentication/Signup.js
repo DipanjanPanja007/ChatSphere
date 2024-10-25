@@ -9,7 +9,6 @@ const Signup = () => {
     const [name, setName] = useState();
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
-    // const [picture, setPicture] = useState();           //  <----------------------
     const [showPass, setShowPass] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -19,36 +18,6 @@ const Signup = () => {
     const handelClickPass = () => setShowPass(!showPass);
     const handelClickConfirmPass = () => setShowConfirmPass(!showConfirmPass);
 
-    // const postDetails = (e) => {
-    //     setLoading(true);
-    //     const file = e.target.files?.[0] || null;
-    //     console.log(`file: ${e.target.files[0]}`);
-
-    //     if (!file) {
-    //         console.log("User goes with default Profile Pic");
-    //         setPicture(null);
-    //         setLoading(false);
-    //         return;
-    //     }
-
-    //     const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/jpg"];
-    //     if (!allowedTypes.includes(file.type)) {
-    //         console.log("File type is not image: reported from signup.js -> postDetails()");
-    //         toast({
-    //             title: "Please Select a Valid Image!",
-    //             status: "warning",
-    //             duration: 5000,
-    //             isClosable: true,
-    //             position: "bottom",
-    //         });
-    //         setLoading(false);
-    //         return;
-    //     }
-    //     console.log("File type is image: reported from signup.js -> postDetails()");
-
-    //     setPicture(file);
-    //     setLoading(false);
-    // };
 
     const submitHandler = async () => {
         if (password !== confirmPassword) {
@@ -68,9 +37,9 @@ const Signup = () => {
         formData.append('password', password);
 
         const profilePicFile = document.getElementById("profilePic").files[0] || null;
-        console.log(`profilepic: ${profilePicFile}`);
+        console.log(`profilePic: ${profilePicFile}`);
 
-        formData.append('profilePicture', profilePicFile);
+        formData.append('profilePic', profilePicFile);
 
         for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
@@ -78,7 +47,7 @@ const Signup = () => {
 
         setLoading(true);
         try {
-            const response = await fetch('/api/user/register', {
+            const response = await fetch('http://localhost:5000/api/user/register', {
                 method: 'POST',
                 body: formData,
             });
@@ -104,8 +73,9 @@ const Signup = () => {
             setEmail('');
             setPassword('');
             setConfirmPassword('');
-            // setPicture(null);
+            document.getElementById("profilePic").value = ""
         } catch (error) {
+            console.log("error: ", error)
             toast({
                 title: error.message,
                 status: "error",
@@ -127,10 +97,10 @@ const Signup = () => {
                 </FormLabel>
 
                 <Input
+                    value={name}
                     placeholder='Enter your name'
                     onChange={(event) => {
                         setName(event.target.value)
-                        // console.log(name)
                     }}
                 />
             </FormControl>
@@ -141,6 +111,7 @@ const Signup = () => {
                 </FormLabel>
 
                 <Input
+                    value={email}
                     placeholder='Enter your email'
                     onChange={(event) => {
                         setEmail(event.target.value)
@@ -153,6 +124,7 @@ const Signup = () => {
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                     <Input
+                        value={password}
                         type={showPass ? "text" : "password"}
                         placeholder='Enter Password'
                         onChange={(event) => {
@@ -178,6 +150,7 @@ const Signup = () => {
                 <FormLabel>Confirm Password</FormLabel>
                 <InputGroup>
                     <Input
+                        value={confirmPassword}
                         type={showConfirmPass ? "text" : "password"}
                         placeholder='Confirm Password'
                         onChange={(event) => {
@@ -199,7 +172,7 @@ const Signup = () => {
                 </InputGroup>
             </FormControl>
 
-            <FormControl id='profilePic' isRequired>
+            <FormControl id='picture' isRequired>
                 <FormLabel>
                     Upload your Profile Picture
                 </FormLabel>
