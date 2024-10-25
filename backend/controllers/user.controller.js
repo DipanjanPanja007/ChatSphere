@@ -22,19 +22,19 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     // check if user provided profilePicture or not
-    let profilePicPath = "";
+
     // console.log("req.file: ", req.file);
-
+    let profilePicPath = "";
     if (req.file) {
-
         profilePicPath = req.file.path;
-        // console.log("finally inside ", profilePicPath);
-
     }
-    console.log("pf path: ", profilePicPath);
-    const picName = req.file.filename;
+    // console.log("pf path: ", profilePicPath);
+    let profilePic = ""
+    if (profilePicPath) {
+        const picName = req.file?.filename;
+        profilePic = await uploadOnCloudinary(profilePicPath, picName);
+    }
 
-    const profilePic = await uploadOnCloudinary(profilePicPath, picName);
 
     // create user 
     const user = await User.create({
