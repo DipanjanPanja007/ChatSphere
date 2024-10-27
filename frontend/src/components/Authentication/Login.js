@@ -34,7 +34,6 @@ const Login = () => {
             password: info.password
         }
 
-
         setLoading(true);
         try {
             const response = await fetch('http://localhost:5000/api/user/login', {
@@ -49,6 +48,13 @@ const Login = () => {
             console.log(`responseData : ${responseData}`);
 
             if (!response.ok) {
+                toast({
+                    title: "Failed to register!",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom",
+                });
                 throw new Error(responseData.message || "Failed to register");
             }
             console.log("response created");
@@ -128,7 +134,7 @@ const Login = () => {
             <Button
                 colorScheme="blue"
                 width={"100%"}
-                loading={loading}
+                isLoading={loading}
                 style={{ marginTop: 15 }}
                 onClick={submitHandler}
             >Login</Button>

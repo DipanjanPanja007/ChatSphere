@@ -168,7 +168,6 @@ const Signup = () => {
                             bg={"white"}
                             marginRight={"0.5rem"}
                             padding={"0.3rem"}
-                            loading={loading}
                             onClick={handelClickConfirmPass}
                         >{showConfirmPass ? "Hide" : "Show"}
                         </Button>
@@ -194,7 +193,7 @@ const Signup = () => {
                 width={"100%"}
                 style={{ marginTop: 15 }}
                 onClick={submitHandler}
-                loading={loading}
+                isLoading={loading}
             >
                 Submit
             </Button>
