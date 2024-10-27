@@ -1,16 +1,85 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react'
+import { useToast } from '@chakra-ui/react';
+
 
 const Login = () => {
 
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [info, setInfo] = useState({
+        email: "",
+        password: "",
+    });
+    const toast = useToast()
+    const [loading, setLoading] = useState(false);
     const [showPass, setShowPass] = useState(false);
 
     const handelClickPass = () => setShowPass(!showPass);
 
-    const postDetails = () => { };
-    const submitHandler = () => { };
+    const submitHandler = async () => {
+        if (!info.email.trim() || !info.password.trim()) {
+            toast({
+                title: "All fields are required!",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            return;
+        }
+        console.log(`email: ${info.email}, pass: ${info.password}`);
+
+
+        const data = {
+            email: info.email,
+            password: info.password
+        }
+
+
+        setLoading(true);
+        try {
+            const response = await fetch('http://localhost:5000/api/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set content type to JSON
+                },
+                body: JSON.stringify(data),
+            });
+
+            const responseData = await response.json();
+            console.log(`responseData : ${responseData}`);
+
+            if (!response.ok) {
+                throw new Error(responseData.message || "Failed to register");
+            }
+            console.log("response created");
+
+            toast({
+                title: "Login Successful!",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setInfo({
+                email: "",
+                password: ""
+            })
+        } catch (error) {
+            console.log("error: ", error)
+            toast({
+                title: error.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+        } finally {
+            setLoading(false);
+        }
+
+
+
+    };
 
 
     return (
@@ -23,9 +92,10 @@ const Login = () => {
                 </FormLabel>
 
                 <Input
+                    value={info.email}
                     placeholder='Enter your email'
                     onChange={(event) => {
-                        setEmail(event.target.value)
+                        setInfo((prev) => ({ ...prev, email: event.target.value }))
                     }}
                 />
             </FormControl>
@@ -34,10 +104,11 @@ const Login = () => {
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                     <Input
+                        value={info.password}
                         type={showPass ? "text" : "password"}
                         placeholder='Enter Password'
                         onChange={(event) => {
-                            setPassword(event.target.value)
+                            setInfo((prev) => ({ ...prev, password: event.target.value }))
                         }}
                     />
                     <InputRightElement width={"4.5 rem"} >
@@ -57,6 +128,7 @@ const Login = () => {
             <Button
                 colorScheme="blue"
                 width={"100%"}
+                loading={loading}
                 style={{ marginTop: 15 }}
                 onClick={submitHandler}
             >Login</Button>
@@ -67,8 +139,7 @@ const Login = () => {
                 width={"100%"}
                 style={{ marginTop: 15 }}
                 onClick={() => {
-                    setEmail("guest@example.com")
-                    setPassword("123456")
+                    setInfo((prev) => ({ ...prev, email: "guest@example.com", password: "123456" }))
                 }}
             >Login with Guest User</Button>
 

@@ -1,4 +1,3 @@
-import { Button } from '@chakra-ui/react'
 import './App.css';
 import { Route } from 'react-router-dom';
 import HomePage from './Pages/HomePage';

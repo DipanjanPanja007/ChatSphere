@@ -1,14 +1,17 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useToast } from '@chakra-ui/react';
+// import useShowMessage from '../shared/showMessage.js';
 
 
 const Signup = () => {
 
-    const [email, setEmail] = useState();
-    const [name, setName] = useState();
-    const [password, setPassword] = useState();
-    const [confirmPassword, setConfirmPassword] = useState();
+    const [info, setInfo] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
     const [showPass, setShowPass] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -20,7 +23,7 @@ const Signup = () => {
 
 
     const submitHandler = async () => {
-        if (password !== confirmPassword) {
+        if (info.password !== info.confirmPassword) {
             toast({
                 title: "Passwords do not match!",
                 status: "error",
@@ -28,22 +31,23 @@ const Signup = () => {
                 isClosable: true,
                 position: "bottom",
             });
+
             return;
         }
 
         const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('password', password);
+        formData.append('name', info.name);
+        formData.append('email', info.email);
+        formData.append('password', info.password);
 
         const profilePicFile = document.getElementById("profilePic").files[0] || null;
-        console.log(`profilePic: ${profilePicFile}`);
+        // console.log(`profilePic: ${profilePicFile}`);
 
         formData.append('profilePic', profilePicFile);
 
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
+        // for (let [key, value] of formData.entries()) {
+        //     console.log(`${key}: ${value}`);
+        // }
 
         setLoading(true);
         try {
@@ -53,8 +57,8 @@ const Signup = () => {
             });
 
             const data = await response.json();
-            console.log(`data : ${data}`);
-            console.log(`response : ${response}`);
+            // console.log(`data : ${data}`);
+            // console.log(`response : ${response}`);
 
             if (!response.ok) {
                 throw new Error(data.message || "Failed to register");
@@ -69,10 +73,12 @@ const Signup = () => {
                 position: "bottom",
             });
             // Optionally reset the form
-            setName('');
-            setEmail('');
-            setPassword('');
-            setConfirmPassword('');
+            setInfo({
+                name: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+            })
             document.getElementById("profilePic").value = ""
         } catch (error) {
             console.log("error: ", error)
@@ -97,10 +103,10 @@ const Signup = () => {
                 </FormLabel>
 
                 <Input
-                    value={name}
+                    value={info.name}
                     placeholder='Enter your name'
                     onChange={(event) => {
-                        setName(event.target.value)
+                        setInfo((prev) => ({ ...prev, name: event.target.value }))
                     }}
                 />
             </FormControl>
@@ -111,11 +117,10 @@ const Signup = () => {
                 </FormLabel>
 
                 <Input
-                    value={email}
+                    value={info.email}
                     placeholder='Enter your email'
                     onChange={(event) => {
-                        setEmail(event.target.value)
-                        // console.log(email)
+                        setInfo((prev) => ({ ...prev, email: event.target.value }))
                     }}
                 />
             </FormControl>
@@ -124,12 +129,11 @@ const Signup = () => {
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                     <Input
-                        value={password}
+                        value={info.password}
                         type={showPass ? "text" : "password"}
                         placeholder='Enter Password'
                         onChange={(event) => {
-                            setPassword(event.target.value)
-                            // console.log(password)
+                            setInfo((prev) => ({ ...prev, password: event.target.value }))
                         }}
                     />
                     <InputRightElement width={"4.5 rem"} >
@@ -150,12 +154,11 @@ const Signup = () => {
                 <FormLabel>Confirm Password</FormLabel>
                 <InputGroup>
                     <Input
-                        value={confirmPassword}
+                        value={info.confirmPassword}
                         type={showConfirmPass ? "text" : "password"}
                         placeholder='Confirm Password'
                         onChange={(event) => {
-                            setConfirmPassword(event.target.value)
-                            // console.log(password)
+                            setInfo((prev) => ({ ...prev, confirmPassword: event.target.value }))
                         }}
                     />
                     <InputRightElement width={"4.5 rem"} >
@@ -165,6 +168,7 @@ const Signup = () => {
                             bg={"white"}
                             marginRight={"0.5rem"}
                             padding={"0.3rem"}
+                            loading={loading}
                             onClick={handelClickConfirmPass}
                         >{showConfirmPass ? "Hide" : "Show"}
                         </Button>
