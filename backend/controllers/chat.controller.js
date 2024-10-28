@@ -102,9 +102,62 @@ const fetchChats = asyncHandler(async (req, res) => {
     }
 });
 
+const createGroupChat = asyncHandler(async (req, res) => {
+    /*
+     * step#1: take input : group name and users
+     * step#2: add yourself and check group count condition 
+     * step#3: create a new Group Chat object , populate.., remove credentials...
+     * step#4: return new groupChat
+     */
+
+    // step#1: take input : group name and users
+    const { users, groupName } = req.body;
+    if (!users || !groupName) {
+        throw new ApiError(400, "A groupName and Group Participates required")
+    }
+
+    let allUsers = JSON.parse(users);
+
+    if (allUsers.length < 2) {
+        throw new ApiError(400, `You need atleast ${2 - allUsers.length} participates to create a group `)
+    }
+
+    // step#2: add yourself
+    allUsers.push(req.user);
+
+    try {
+        // step#3: create a new Group Chat object , populate.., remove credentials...
+        const groupChat = await Chat.create({
+            chatName: groupName,
+            users: allUsers,
+            isGroupChat: true,
+            groupAdmin: req.user
+        });
+
+        const createdGroupChat = await Chat.findOne({ _id: groupChat._id })
+            .populate("users", "-password")
+            .populate("groupAdmin", "-password");
+
+        // step#4: return new groupChat
+        return res
+            .status(201)
+            .json(
+                new ApiResponse(
+                    201,
+                    createdGroupChat
+                )
+            )
+
+    } catch (error) {
+        throw new ApiError(400, `Something went wrong while creating GroupChat: ${error.message}`)
+    }
+
+});
+
 
 
 export {
     accessChat,
     fetchChats,
+    createGroupChat,
 } 
