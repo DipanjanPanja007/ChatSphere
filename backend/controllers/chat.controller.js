@@ -74,8 +74,37 @@ const accessChat = asyncHandler(async (req, res) => {
 });
 
 
+const fetchChats = asyncHandler(async (req, res) => {
+
+    /*
+     * step#1: find all chats with me: search chats with user as me
+     * step#2: populate users, groupAdmin, latestMessage and return result removing credentials
+     */
+
+    try {
+        Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+            .populate("users", "-password")
+            .populate("groupAdmin", "-password")
+            .populate("latestMessage")
+            .sort({ updatedAt: -1 })
+            .then(async (result) => {
+                return res
+                    .status(201)
+                    .json(
+                        new ApiResponse(
+                            201,
+                            result
+                        )
+                    )
+            })
+    } catch (error) {
+        throw new ApiError(400, `Error from fetchChats : ${error.message}`)
+    }
+});
 
 
 
-
-export { accessChat } 
+export {
+    accessChat,
+    fetchChats,
+} 
