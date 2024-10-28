@@ -7,8 +7,9 @@ import bodyParser from 'body-parser';
 
 import { connectDb } from './config/db.js';
 import userRouter from './routes/user.route.js';
+import chatRouter from './routes/chat.route.js';
 import { notFound, errorHandler } from './middleware/error.middleware.js';
-
+import cookieParser from 'cookie-parser';
 
 
 
@@ -16,6 +17,7 @@ connectDb();
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(bodyParser.json())
+app.use(cookieParser());
 
 app.use(cors({
     origin: "http://localhost:3000", // Replace with your frontend's URL
@@ -33,6 +35,10 @@ app.get("/", (_, res) => {
 });
 
 app.use("/api/user", userRouter);
+app.use("/api/chat", chatRouter);
+// app.use("/api/message", messageRoutes);
+
+
 app.use(notFound)
 app.use(errorHandler)
 

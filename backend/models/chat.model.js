@@ -19,10 +19,13 @@ const chatModel = mongoose.Schema(
             type: Boolean,
             default: false,
         },
-        users: {
-            type: mongoose.Types.ObjectId,
-            ref: "User",
-        },
+        // for one-to-one chat, in users array, there will be 1 users, for group, >2
+        users: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: "User",
+            }
+        ],
         latestMessage: {
             type: mongoose.Types.ObjectId,
             ref: "Message",

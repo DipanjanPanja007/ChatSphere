@@ -51,7 +51,7 @@ const Signup = () => {
 
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:5000/api/user/register', {
+            const response = await fetch('http://localhost:5000/api/user/', {
                 method: 'POST',
                 body: formData,
             });
