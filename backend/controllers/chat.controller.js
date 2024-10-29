@@ -154,10 +154,50 @@ const createGroupChat = asyncHandler(async (req, res) => {
 
 });
 
+const renameGroup = asyncHandler(async (req, res) => {
+
+    /*
+     * step#1: take input chatId and updatedChatName
+     * step#2: find the chat and update, populate..., and send 
+     */
+
+    const { chatId, newChatName } = req.body;
+
+    if ([chatId, newChatName].some((field) => field?.trim() === "")) {
+        throw new ApiError(400, "All fields are required...");
+    }
+
+    const updatedChat = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+            chatName: newChatName
+        },
+        {
+            new: true,                      // sothat it will send the updated one
+        }
+    )
+        .populate("users", "-password")
+        .populate("groupAdmin", "-password")
+
+    if (!updatedChat) {
+        throw new ApiError(400, `GroupChat name not updated `)
+    }
+
+    res
+        .status(201)
+        .json(
+            new ApiResponse(
+                201,
+                updatedChat
+            )
+        )
+});
+
 
 
 export {
     accessChat,
     fetchChats,
     createGroupChat,
+    renameGroup
 } 
