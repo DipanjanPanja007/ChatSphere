@@ -53,6 +53,7 @@ const Signup = () => {
         try {
             const response = await fetch('http://localhost:5000/api/user/', {
                 method: 'POST',
+                credentials: "include",
                 body: formData,
             });
 
