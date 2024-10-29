@@ -41,6 +41,7 @@ const Login = () => {
                 headers: {
                     'Content-Type': 'application/json', // Set content type to JSON
                 },
+                credentials: true,
                 body: JSON.stringify(data),
             });
 
