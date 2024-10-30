@@ -194,10 +194,92 @@ const renameGroup = asyncHandler(async (req, res) => {
 });
 
 
+const addToGroup = asyncHandler(async (req, res) => {
+    /*
+     * step#1: take input chatId and userId (whom to add)
+     * step#2: find the chat and update, populate..., and send 
+     */
+
+    const { chatId, userId } = req.body;
+
+    if ([chatId, userId].some((field) => field?.trim() === "")) {
+        throw new ApiError(400, "All fields are required...");
+    }
+
+    const addUserUpdatedChat = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+            $push: { users: userId }
+        },
+        {
+            new: true,
+        }
+    )
+        .populate("users", "-password")
+        .populate("groupAdmin", "-password")
+    if (!addUserUpdatedChat) {
+        throw new ApiError(400, `GroupChat name not updated `)
+    }
+
+    res
+        .status(201)
+        .json(
+            new ApiResponse(
+                201,
+                addUserUpdatedChat
+            )
+        )
+});
+
+
+const removeFromGroup = asyncHandler(async (req, res) => {
+    /*
+     * step#1: take input chatId and userId (whom to add)
+     * step#2: find the chat and update, populate..., and send 
+     */
+
+    const { chatId, userId } = req.body;
+
+    if ([chatId, userId].some((field) => field?.trim() === "")) {
+        throw new ApiError(400, "All fields are required...");
+    }
+
+    const removeUserUpdatedChat = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+            $pull: { users: userId }
+        },
+        {
+            new: true,
+        }
+    )
+        .populate("users", "-password")
+        .populate("groupAdmin", "-password")
+    if (!removeUserUpdatedChat) {
+        throw new ApiError(400, `GroupChat name not updated `)
+    }
+
+    res
+        .status(201)
+        .json(
+            new ApiResponse(
+                201,
+                removeUserUpdatedChat
+            )
+        )
+
+
+
+});
+
+
+
 
 export {
     accessChat,
     fetchChats,
     createGroupChat,
-    renameGroup
+    renameGroup,
+    addToGroup,
+    removeFromGroup,
 } 
