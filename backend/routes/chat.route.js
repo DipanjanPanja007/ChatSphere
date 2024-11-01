@@ -1,8 +1,8 @@
 import express from "express";
-const router = express.Router();
 import { verifyJWT } from "../middleware/auth.middleware.js"
 import { accessChat, addToGroup, createGroupChat, fetchChats, removeFromGroup, renameGroup } from "../controllers/chat.controller.js";
 
+const router = express.Router();
 
 router.route("/").post(verifyJWT, accessChat);                  // access or create one-to-one chat, 
 router.route("/").get(verifyJWT, fetchChats);                   // to fetch all chats with me
