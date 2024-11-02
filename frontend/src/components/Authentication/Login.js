@@ -51,7 +51,7 @@ const Login = () => {
 
             // const userInfoForLocalStorage = await response.data.user.json()
 
-            localStorage.setItem("userInfo", JSON.stringify(responseData.data.user));
+            localStorage.setItem("userInfo", JSON.stringify(responseData));
 
             // localStorage.setItem("testItem", "testValue");
             // console.log(localStorage.getItem("testItem")); // should return "testValue"

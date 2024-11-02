@@ -198,8 +198,15 @@ const allUsers = asyncHandler(async (req, res) => {
         .find(keyword)
         .find({ _id: { $ne: req.user._id } });
 
+    console.log(users);
+
     // step#3: send users object. If not found, send empty object
-    res.send(users);
+    return res
+        .status(200)
+        .json({
+            "data": { users },
+            "message": "users found successfully"
+        })
 })
 
 export { registerUser, loginUser, allUsers }
