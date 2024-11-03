@@ -12,10 +12,10 @@ const SideDrawer = () => {
     const [search, setSearch] = useState("")
     const [searchResult, setSearchResult] = useState([])
     const [loading, setLoading] = useState(false)
-    const [loadingChat, setLoadingChat] = useState()
+    const [loadingChat, setLoadingChat] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { user } = ChatState()
+    const { user, setSelectedChat, chats, setChats } = ChatState()
     const history = useHistory()
     const toast = useToast()
 
@@ -56,7 +56,6 @@ const SideDrawer = () => {
             //         'Content-Type': 'application/json',
             //     },
             //     credentials: "include",
-
             // })
 
             setSearchResult(response.data.data.users);
@@ -75,7 +74,30 @@ const SideDrawer = () => {
     }
 
     const accessChat = async (userId) => {
+        try {
+            setLoadingChat(true);
+            const response = await axios.post(`http://localhost:5000/api/chat`, {
+                userId,
+                headers: {
+                    Authorization: `Bearer ${user.data.accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+                credentials: "include",
+            });
 
+            setSelectedChat(response)
+            setLoadingChat(false)
+
+
+        } catch (error) {
+            toast({
+                title: "Error occoured while fetching chats",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-right"
+            });
+        }
     }
 
     return (
