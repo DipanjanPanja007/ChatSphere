@@ -1,4 +1,4 @@
-import { Box, Button, Text, Tooltip, Menu, MenuButton, MenuList, Avatar, MenuItem, MenuDivider, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, DrawerFooter, Input, useToast, } from '@chakra-ui/react'
+import { Box, Button, Text, Tooltip, Menu, MenuButton, MenuList, Avatar, MenuItem, MenuDivider, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, DrawerFooter, Input, useToast, Spinner, } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import ProfileModal from './ProfileModal'
@@ -10,7 +10,7 @@ import axios from 'axios'
 const SideDrawer = () => {
 
     const [search, setSearch] = useState("")
-    const [searchResult, setSearchResult] = useState([])
+    const [searchResult, setSearchResult] = useState([])          // stores the searched users array
     const [loading, setLoading] = useState(false)
     const [loadingChat, setLoadingChat] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -71,22 +71,31 @@ const SideDrawer = () => {
                 position: "bottom-left"
             });
         }
-    }
+    };
 
     const accessChat = async (userId) => {
         try {
             setLoadingChat(true);
-            const response = await axios.post(`http://localhost:5000/api/chat`, {
-                userId,
+            const config = {
                 headers: {
                     Authorization: `Bearer ${user.data.accessToken}`,
                     'Content-Type': 'application/json',
-                },
-                credentials: "include",
-            });
+                }
+            };
+
+            const response = await axios.post(
+                'http://localhost:5000/api/chat',
+                { userId },
+                config
+            );
+
+            console.log("Access chat with 2nd person-response: ", response);
+
+            console.log("chats : ", chats);
+
+            if (!chats.find((c) => c._id === response.data._id)) setChats([response, ...chats])
 
             setSelectedChat(response)
-            setLoadingChat(false)
 
 
         } catch (error) {
@@ -97,8 +106,10 @@ const SideDrawer = () => {
                 isClosable: true,
                 position: "bottom-right"
             });
+        } finally {
+            setLoadingChat(false);
         }
-    }
+    };
 
     return (
         <>
@@ -177,7 +188,7 @@ const SideDrawer = () => {
                                 ))
                             )
                         }
-
+                        {loadingChat && <Spinner ml={"auto"} display={"flex"} />}
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
