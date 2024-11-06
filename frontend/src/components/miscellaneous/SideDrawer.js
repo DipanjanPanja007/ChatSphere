@@ -91,11 +91,11 @@ const SideDrawer = () => {
 
             console.log("Access chat with 2nd person-response: ", response);
 
-            console.log("chats : ", chats);
+            // console.log("chats : ", chats);
 
-            if (!chats.find((c) => c._id === response.data._id)) setChats([response, ...chats])
+            if (!chats.find((c) => c._id === response.data._id)) setChats([response.data, ...chats])
 
-            setSelectedChat(response)
+            setSelectedChat(response.data)
 
 
         } catch (error) {

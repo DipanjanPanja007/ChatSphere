@@ -39,7 +39,7 @@ const MyChats = () => {
     };
 
     useEffect(() => {
-        setLoggedUser(localStorage.getItem("userInfo"))
+        setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
         fetchChats();
     }, [])
 
