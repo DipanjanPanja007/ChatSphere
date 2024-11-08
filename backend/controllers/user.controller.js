@@ -196,7 +196,8 @@ const allUsers = asyncHandler(async (req, res) => {
     // step#2: find user(s) by keyword
     const users = await User
         .find(keyword)
-        .find({ _id: { $ne: req.user._id } });
+        .find({ _id: { $ne: req.user._id } })
+        .select("-password")
 
     console.log(users);
 
