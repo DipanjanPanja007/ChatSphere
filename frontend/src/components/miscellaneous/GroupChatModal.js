@@ -112,7 +112,7 @@ const GroupChatModal = ({ children }) => {
             );
 
             if (!data) {
-
+                console.log("group chat is not created");
             }
             console.log(data);
 

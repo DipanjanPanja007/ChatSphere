@@ -6,7 +6,7 @@ import axios from 'axios';
 import { getSender } from '../../config/ChatLogin.js';
 import GroupChatModal from './GroupChatModal.js';
 
-const MyChats = () => {
+const MyChats = ({ fetchAgain }) => {
     const [loggedUser, setLoggedUser] = useState();
     const { selectedChat, setSelectedChat, chats, setChats, user } = ChatState();
 
@@ -42,7 +42,7 @@ const MyChats = () => {
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
         fetchChats();
-    }, [])
+    }, [fetchAgain])
 
     return (
         <>

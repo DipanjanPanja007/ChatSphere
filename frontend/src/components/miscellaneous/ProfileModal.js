@@ -22,21 +22,21 @@ const ProfileModal = ({ user, children }) => {
                         display={"flex"}
                         justifyContent={"center"}
                     >
-                        {user.data.user.name}
+                        {user.name}
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody display={"flex"} flexDirection={"column"} alignItems={"center"} >
                         <Image
                             borderRadius={"full"}
                             boxSize={"13rem"}
-                            src={user.data.user.profilePic}
-                            alt={user.data.user.name}
+                            src={user.profilePic}
+                            alt={user.name}
                             display={"flex"}
                             justifyContent={"center"}
                             marginBottom={"1rem"}
                         />
                         <Text fontWeight='bold' mb='1rem' textAlign={"center"} fontSize={"1.4rem"}
-                        >{user.data.user.email}</Text>
+                        >{user.email}</Text>
                     </ModalBody>
 
                     <ModalFooter>

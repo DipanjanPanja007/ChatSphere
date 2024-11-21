@@ -1,6 +1,7 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useToast } from '@chakra-ui/react';
+import { useHistory } from 'react-router-dom'
 // import useShowMessage from '../shared/showMessage.js';
 
 
@@ -16,6 +17,7 @@ const Signup = () => {
     const [showConfirmPass, setShowConfirmPass] = useState(false);
     const [loading, setLoading] = useState(false);
     const toast = useToast()
+    const history = useHistory();
 
 
     const handelClickPass = () => setShowPass(!showPass);
@@ -81,6 +83,10 @@ const Signup = () => {
                 confirmPassword: "",
             })
             document.getElementById("profilePic").value = ""
+
+            setLoading(false)
+            history.push("/chats")
+
         } catch (error) {
             console.log("error: ", error)
             toast({

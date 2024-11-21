@@ -1,6 +1,7 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react'
 import { useToast } from '@chakra-ui/react';
+import { useHistory } from 'react-router-dom'
 
 
 const Login = () => {
@@ -10,6 +11,7 @@ const Login = () => {
         password: "",
     });
     const toast = useToast()
+    const history = useHistory()
     const [loading, setLoading] = useState(false);
     const [showPass, setShowPass] = useState(false);
 
@@ -82,6 +84,11 @@ const Login = () => {
                 email: "",
                 password: ""
             })
+
+            setLoading(false)
+            history.push("/chats");
+
+
         } catch (error) {
             console.log("error: ", error)
             toast({
