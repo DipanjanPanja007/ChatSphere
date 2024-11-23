@@ -8,6 +8,7 @@ import bodyParser from 'body-parser';
 import { connectDb } from './config/db.js';
 import userRouter from './routes/user.route.js';
 import chatRouter from './routes/chat.route.js';
+import messageRoutes from './routes/message.route.js';
 import { notFound, errorHandler } from './middleware/error.middleware.js';
 import cookieParser from 'cookie-parser';
 
@@ -36,7 +37,7 @@ app.get("/", (_, res) => {
 
 app.use("/api/user", userRouter);
 app.use("/api/chat", chatRouter);
-// app.use("/api/message", messageRoutes);
+app.use("/api/message", messageRoutes);
 
 
 app.use(notFound)
