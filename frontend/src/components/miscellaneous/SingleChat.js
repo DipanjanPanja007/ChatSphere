@@ -1,14 +1,90 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
-import { Box, IconButton, Text } from '@chakra-ui/react';
+import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react';
 import { getSender, getSenderFull } from '../../config/ChatLogin';
 import ProfileModal from './ProfileModal';
 import UpdateGroupChatModal from './UpdateGroupChatModal';
+import axios from 'axios';
+import ScrollableChat from './ScrollableChat';
 
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
+    const toast = useToast();
     const { user, selectedChat, setSelectedChat } = ChatState();
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [newMessage, setNewMessage] = useState();
+
+
+    const typingHandler = async (e) => {
+        setNewMessage(e.target.value)
+    }
+
+
+    const sendMessage = async (event) => {
+        if (event.key === "Enter" && newMessage.trim()) {
+            try {
+                setNewMessage("")
+                const { data } = await axios.post(`http://localhost:5000/api/message`, {
+                    content: newMessage,
+                    chatId: selectedChat._id,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${user.data.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: "include",
+                });
+                console.log(data);
+
+                setMessages([...messages, data.data])
+
+
+            } catch (error) {
+                toast({
+                    title: "Error occoured while sending message",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-right"
+                })
+                console.log(`error message: ${error.message}`);
+
+            }
+        }
+    }
+
+    const fetchMessages = async () => {
+        if (!selectedChat) return;
+
+        try {
+            setLoading(true)
+            const { data } = await axios.get(`http://localhost:5000/api/message/${selectedChat._id}`, {
+                headers: {
+                    Authorization: `Bearer ${user.data.accessToken}`
+                }
+            });
+            console.log(data);
+            setMessages(data.data)
+            setLoading(false)
+        } catch (error) {
+            toast({
+                title: "Error occoured while fetching particular chat message",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-right"
+            })
+            console.log(`error is: ${error.message}`);
+
+        }
+    }
+
+    useEffect(() => {
+        fetchMessages()
+    }, [selectedChat])
+
 
     return (
         <>
@@ -41,6 +117,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                                             <UpdateGroupChatModal
                                                 fetchAgain={fetchAgain}
                                                 setFetchAgain={setFetchAgain}
+                                                fetchMessages={fetchMessages}
                                             />
                                         }
                                     </>
@@ -58,7 +135,35 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                             borderRadius="lg"
                             overflowY="hidden"
                         >
-                            {/* {chat here} */}
+                            {
+                                loading ? (
+                                    <Spinner
+                                        size={"xl"}
+                                        width={20}
+                                        height={20}
+                                        alignSelf={"center"}
+                                        margin={"auto"}
+                                    />
+                                ) : (
+                                    <div
+                                        display={"flex"}
+                                        flexDir={"column"}
+                                        overflowY={"scroll"}
+                                        scrollbar-width={"none"}>
+                                        <ScrollableChat messages={messages} />
+                                    </div>
+                                )
+                            }
+
+                            <FormControl onKeyDown={sendMessage} isRequired marginTop={3} >
+                                <Input
+                                    variant={"filled"}
+                                    backgroundColor={"#C2C2C2"}
+                                    placeholder='Kuch lik na....'
+                                    onChange={typingHandler}
+                                    value={newMessage}
+                                />
+                            </FormControl>
                         </Box>
                     </>
                 ) : (
