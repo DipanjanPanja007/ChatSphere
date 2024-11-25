@@ -6,6 +6,10 @@ import ProfileModal from './ProfileModal';
 import UpdateGroupChatModal from './UpdateGroupChatModal';
 import axios from 'axios';
 import ScrollableChat from './ScrollableChat';
+import io from "socket.io-client"
+
+const ENDPOINT = "http://localhost:5000";
+let socket, selectedChatCompare;
 
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -15,7 +19,29 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [newMessage, setNewMessage] = useState();
+    const [socketConnected, setSocketConnected] = useState(false);
 
+    useEffect(() => {
+        socket = io(ENDPOINT)
+        socket.emit("setup", user.data.user);
+        socket.on("connection", () => setSocketConnected(true))
+    }, [])
+
+    useEffect(() => {
+        fetchMessages();
+        selectedChatCompare = selectedChat;          // for notification/show logic...
+    }, [selectedChat])
+
+    useEffect(() => {
+        socket.on("message_recieved", (newMessageReceived) => {
+            if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
+                // give notification
+            }
+            else {
+                setMessages([...messages, newMessageReceived])
+            }
+        });
+    });
 
     const typingHandler = async (e) => {
         setNewMessage(e.target.value)
@@ -37,6 +63,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     credentials: "include",
                 });
                 console.log(data);
+
+                socket.emit('new_message', data.data)
 
                 setMessages([...messages, data.data])
 
@@ -68,6 +96,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             console.log(data);
             setMessages(data.data)
             setLoading(false)
+            socket.emit("join_chat", selectedChat._id)
+
         } catch (error) {
             toast({
                 title: "Error occoured while fetching particular chat message",
@@ -81,9 +111,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }
     }
 
-    useEffect(() => {
-        fetchMessages()
-    }, [selectedChat])
+
 
 
     return (

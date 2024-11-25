@@ -3,6 +3,7 @@ dotenv.config({ path: "./.env" });
 import express from "express";
 import cors from "cors";
 import bodyParser from 'body-parser';
+import { Server } from "socket.io";
 
 
 import { connectDb } from './config/db.js';
@@ -21,9 +22,9 @@ app.use(bodyParser.json())
 app.use(cookieParser());
 
 app.use(cors({
-    origin: "http://localhost:3000", // Replace with your frontend's URL
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-    credentials: true, // If using cookies or auth headers
+    origin: "http://localhost:3000",                // Replace with your frontend's URL
+    methods: ["GET", "POST", "PUT", "DELETE"],      // Allowed HTTP methods
+    credentials: true,                              // If using cookies or auth headers
 
 }));
 app.use(express.json());
@@ -43,4 +44,40 @@ app.use("/api/message", messageRoutes);
 app.use(notFound)
 app.use(errorHandler)
 
-app.listen(PORT, console.log(`Server has started at PORT ${PORT}`));
+const server = app.listen(PORT, console.log(`Server has started at PORT ${PORT}`));
+
+
+const io = new Server(server, {
+    pingTimeout: 1200000,
+    cors: "http://localhost:3000",
+});
+
+io.on("connection", (socket) => {
+    console.log("Connected to socket.io");
+
+    socket.on("setup", (userData) => {
+        socket.join(userData._id);
+        console.log(userData._id);
+        socket.emit("Connected")
+    })
+
+    socket.on('join_chat', (room) => {
+        socket.join(room);
+        console.log("user joined room", room);
+
+    });
+
+    socket.on("new_message", ((newMessageRecieced) => {
+        let chat = newMessageRecieced.chat;
+        console.log(chat);
+
+
+        if (!chat.users) return console.log("chat.users not defined");
+
+        chat.users.forEach((user) => {
+            if (user._id === newMessageRecieced.sender._id) return;
+            socket.in(user._id).emit("message_recieved", newMessageRecieced)
+        });
+    }));
+
+});
