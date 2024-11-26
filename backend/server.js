@@ -83,4 +83,10 @@ io.on("connection", (socket) => {
     socket.on("typing", (room) => socket.in(room).emit("typing"));
     socket.on("stop_typing", (room) => socket.in(room).emit("stop_typing"))
 
+    socket.off("setup", () => {
+        console.log("User disconnected");
+        socket.leave(userData._id)
+
+    })
+
 });

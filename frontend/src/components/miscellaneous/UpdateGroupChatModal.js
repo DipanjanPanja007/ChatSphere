@@ -36,7 +36,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
             return;
         }
 
-        if (selectedChat.groupAdmin._id != user.data.user._id) {
+        if (selectedChat.groupAdmin._id !== user.data.user._id) {
             toast({
                 title: "Error occoured",
                 description: "Only Admin can add members",
