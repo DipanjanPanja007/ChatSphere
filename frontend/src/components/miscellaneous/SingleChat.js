@@ -56,7 +56,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         if (!socketConnected) return;
 
         if (!typing) {
-            setTyping(true)
+            setTyping(true)                                  // here i am setting it true 'cause typingHandler is triggered wherever typing has started
             socket.emit("typing", selectedChat._id)
         }
 
@@ -65,7 +65,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setTimeout(() => {
             let timeNow = new Date().getTime();
             let timediff = timeNow - lastTypingTime
-            if (timediff >= timeNow) {
+            if (timediff >= timerLength && typing) {
                 socket.emit("stop_typing", selectedChat._id)
                 setTyping(false)
             }
