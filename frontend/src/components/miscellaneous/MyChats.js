@@ -78,7 +78,7 @@ const MyChats = ({ fetchAgain }) => {
                 </Box>
 
                 <Box
-                    d="flex"
+                    display="flex"
                     flexDir="column"
                     p={3}
                     backgroundColor="#F8F8F8"
@@ -86,6 +86,7 @@ const MyChats = ({ fetchAgain }) => {
                     h="100%"
                     borderRadius="lg"
                     overflowY="hidden"
+                    scrollBehavior={'smooth'}
                 >
                     {
                         chats ? (

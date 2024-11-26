@@ -20,11 +20,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [loading, setLoading] = useState(false);
     const [newMessage, setNewMessage] = useState();
     const [socketConnected, setSocketConnected] = useState(false);
+    const [typing, setTyping] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
+
 
     useEffect(() => {
         socket = io(ENDPOINT)
         socket.emit("setup", user.data.user);
-        socket.on("connection", () => setSocketConnected(true))
+        socket.on("connected", () => setSocketConnected(true))
+        socket.on("typing", () => setIsTyping(true))
+        socket.on("stop_typing", () => setIsTyping(false))
     }, [])
 
     useEffect(() => {
@@ -44,12 +49,33 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     });
 
     const typingHandler = async (e) => {
-        setNewMessage(e.target.value)
+        setNewMessage(e.target.value);
+
+        // typing indecator logic
+
+        if (!socketConnected) return;
+
+        if (!typing) {
+            setTyping(true)
+            socket.emit("typing", selectedChat._id)
+        }
+
+        let lastTypingTime = new Date().getTime();
+        let timerLength = 3000;
+        setTimeout(() => {
+            let timeNow = new Date().getTime();
+            let timediff = timeNow - lastTypingTime
+            if (timediff >= timeNow) {
+                socket.emit("stop_typing", selectedChat._id)
+                setTyping(false)
+            }
+        }, timerLength);
     }
 
 
     const sendMessage = async (event) => {
         if (event.key === "Enter" && newMessage.trim()) {
+            socket.emit("stop_typing", selectedChat._id)
             try {
                 setNewMessage("")
                 const { data } = await axios.post(`http://localhost:5000/api/message`, {
@@ -184,6 +210,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                             }
 
                             <FormControl onKeyDown={sendMessage} isRequired marginTop={3} >
+
+                                {
+                                    isTyping ? (<div>Typing....</div>) : (<></>)
+                                }
                                 <Input
                                     variant={"filled"}
                                     backgroundColor={"#C2C2C2"}
