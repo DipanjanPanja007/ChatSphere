@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom'
 import ChatLoading from './ChatLoading.js'
 import UserListItem from '../UserAvatar/UserListItem.js'
 import axios from 'axios'
+import { getSender } from '../../config/ChatLogin.js'
 
 const SideDrawer = () => {
 
@@ -15,7 +16,7 @@ const SideDrawer = () => {
     const [loadingChat, setLoadingChat] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { user, setSelectedChat, chats, setChats } = ChatState()
+    const { user, setSelectedChat, chats, setChats, notification, setNotification } = ChatState()
     const history = useHistory()
     const toast = useToast()
 
@@ -137,7 +138,27 @@ const SideDrawer = () => {
                     <Menu>
                         <MenuButton p={1}>
                             <i class="fa-solid fa-bell"  ></i>
-                            {/* <MenuList></MenuList> */}
+                            <MenuList paddingLeft={2}>
+                                {
+                                    !notification.length && "No New Messages"
+                                }
+                                {
+                                    notification.map((noti) => (
+                                        <MenuItem
+                                            key={noti._id}
+                                            onClick={() => {
+                                                setSelectedChat(noti.chat)
+                                                setNotification(notification.filter((n) => n !== noti))
+                                            }} >
+                                            {
+                                                noti.chat.isGroupChat ?
+                                                    `New Message from ${noti.chat.chatName}` :
+                                                    `New Message from ${getSender(user, noti.chat.users)}`
+                                            }
+                                        </MenuItem>
+                                    ))
+                                }
+                            </MenuList>
                         </MenuButton>
                     </Menu>
                     <Menu>
