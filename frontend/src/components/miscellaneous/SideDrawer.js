@@ -1,8 +1,10 @@
-import { Box, Button, Text, Tooltip, Menu, MenuButton, MenuList, Avatar, MenuItem, MenuDivider, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, DrawerFooter, Input, useToast, Spinner, } from '@chakra-ui/react'
+import { Box, Button, Text, Tooltip, Menu, MenuButton, MenuList, Avatar, MenuItem, MenuDivider, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, DrawerFooter, Input, useToast, Spinner, Tag, } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import ProfileModal from './ProfileModal'
 import { useHistory } from 'react-router-dom'
+import NotificationBadge from "react-notification-badge";
+import { Effect } from "react-notification-badge";
 import ChatLoading from './ChatLoading.js'
 import UserListItem from '../UserAvatar/UserListItem.js'
 import axios from 'axios'
@@ -137,7 +139,11 @@ const SideDrawer = () => {
                 <div>
                     <Menu>
                         <MenuButton p={1}>
-                            <i class="fa-solid fa-bell"  ></i>
+                            <NotificationBadge
+                                count={notification.length}
+                                effect={Effect.SCALE}
+                            />
+                            <i class="fa-solid fa-bell"></i>
                             <MenuList paddingLeft={2}>
                                 {
                                     !notification.length && "No New Messages"
@@ -145,11 +151,17 @@ const SideDrawer = () => {
                                 {
                                     notification.map((noti) => (
                                         <MenuItem
+                                            cursor={"pointer"}
                                             key={noti._id}
-                                            onClick={() => {
-                                                setSelectedChat(noti.chat)
-                                                setNotification(notification.filter((n) => n !== noti))
-                                            }} >
+                                            zIndex={99999}  // Add zIndex here
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                console.log(`notification after clicking: ${notification}`);
+                                                setSelectedChat(noti.chat);
+                                                setNotification(notification.filter((n) => n !== noti));
+                                            }}
+                                            onMouseOver={console.log("hi")}
+                                        >
                                             {
                                                 noti.chat.isGroupChat ?
                                                     `New Message from ${noti.chat.chatName}` :
@@ -161,6 +173,7 @@ const SideDrawer = () => {
                             </MenuList>
                         </MenuButton>
                     </Menu>
+
                     <Menu>
                         <MenuButton as={Button} rightIcon={<i class="fa-solid fa-angle-down"></i>}  >
                             <Avatar size={"sm"} cursor={"pointer"} name={user.data.user.name} src={user.data.user.profilePic} />
