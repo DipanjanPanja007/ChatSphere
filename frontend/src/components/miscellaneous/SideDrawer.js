@@ -144,34 +144,35 @@ const SideDrawer = () => {
                                 effect={Effect.SCALE}
                             />
                             <i class="fa-solid fa-bell"></i>
-                            <MenuList paddingLeft={2}>
-                                {
-                                    !notification.length && "No New Messages"
-                                }
-                                {
-                                    notification.map((noti) => (
-                                        <MenuItem
-                                            cursor={"pointer"}
-                                            key={noti._id}
-                                            zIndex={99999}  // Add zIndex here
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                console.log(`notification after clicking: ${notification}`);
-                                                setSelectedChat(noti.chat);
-                                                setNotification(notification.filter((n) => n !== noti));
-                                            }}
-                                            onMouseOver={console.log("hi")}
-                                        >
-                                            {
-                                                noti.chat.isGroupChat ?
-                                                    `New Message from ${noti.chat.chatName}` :
-                                                    `New Message from ${getSender(user, noti.chat.users)}`
-                                            }
-                                        </MenuItem>
-                                    ))
-                                }
-                            </MenuList>
                         </MenuButton>
+                        <MenuList paddingLeft={2}>
+                            {
+                                !notification.length && "No New Messages"
+                            }
+                            {
+                                notification.map((noti) => (
+                                    <MenuItem
+                                        cursor={"pointer"}
+                                        key={noti._id}
+                                        zIndex={99999}  // Add zIndex here
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            console.log(`notification after clicking: ${notification}`);
+                                            setSelectedChat(noti.chat);
+                                            setNotification(notification.filter((n) => n !== noti));
+                                        }}
+                                        onMouseOver={console.log("hi")}
+                                    >
+                                        {
+                                            noti.chat.isGroupChat ?
+                                                `New Message from ${noti.chat.chatName}` :
+                                                `New Message from ${getSender(user, noti.chat.users)}`
+                                        }
+                                    </MenuItem>
+                                ))
+                            }
+                        </MenuList>
+
                     </Menu>
 
                     <Menu>
