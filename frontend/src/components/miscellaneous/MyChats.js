@@ -85,7 +85,7 @@ const MyChats = ({ fetchAgain }) => {
                     w="100%"
                     h="100%"
                     borderRadius="lg"
-                    overflowY="hidden"
+                    overflowY="auto"
                     scrollBehavior={'smooth'}
                 >
                     {

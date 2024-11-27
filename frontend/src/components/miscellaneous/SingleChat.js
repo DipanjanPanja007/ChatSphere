@@ -67,6 +67,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 setMessages([...messages, newMessageReceived])
             }
         });
+
+        // to escape from a chat, just press esc key
+        const handleEscKey = (event) => {
+            if (event.key === "Escape") {
+                setSelectedChat("");
+            }
+        };
+
+        // Add event listener for keydown
+        window.addEventListener("keydown", handleEscKey);
+
+        return () => {
+            window.removeEventListener("keydown", handleEscKey);
+        };
     });
 
     const typingHandler = async (e) => {

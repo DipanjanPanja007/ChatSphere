@@ -154,10 +154,7 @@ const SideDrawer = () => {
                                     <MenuItem
                                         cursor={"pointer"}
                                         key={noti._id}
-                                        zIndex={99999}  // Add zIndex here
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            console.log(`notification after clicking: ${notification}`);
+                                        onClick={() => {
                                             setSelectedChat(noti.chat);
                                             setNotification(notification.filter((n) => n !== noti));
                                         }}
