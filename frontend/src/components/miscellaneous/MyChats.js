@@ -7,7 +7,6 @@ import { getSender } from '../../config/ChatLogic.js';
 import GroupChatModal from './GroupChatModal.js';
 
 const MyChats = ({ fetchAgain }) => {
-    const [loggedUser, setLoggedUser] = useState();
     const { selectedChat, setSelectedChat, chats, setChats, user } = ChatState();
 
     const toast = useToast();
@@ -40,7 +39,6 @@ const MyChats = ({ fetchAgain }) => {
     };
 
     useEffect(() => {
-        setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
         fetchChats();
     }, [fetchAgain])
 
@@ -106,7 +104,7 @@ const MyChats = ({ fetchAgain }) => {
                                             {
                                                 chat.isGroupChat ?
                                                     chat.chatName
-                                                    : getSender(loggedUser, chat.users)
+                                                    : getSender(user, chat.users)
                                             }
                                         </Text>
                                     </Box>

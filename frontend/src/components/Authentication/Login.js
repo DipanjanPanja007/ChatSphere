@@ -2,9 +2,12 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, V
 import React, { useState } from 'react'
 import { useToast } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom'
+import { ChatState } from '../../Context/ChatProvider';
 
 
 const Login = () => {
+
+    const { user, setUser } = ChatState();
 
     const [info, setInfo] = useState({
         email: "",
@@ -48,7 +51,7 @@ const Login = () => {
             });
 
             const responseData = await response.json();
-            console.log(responseData);
+            // console.log(responseData);
 
 
             // const userInfoForLocalStorage = await response.data.user.json()
@@ -72,6 +75,8 @@ const Login = () => {
                 throw new Error(responseData.message || "Failed to register");
             }
             console.log("response created");
+
+            setUser(responseData)
 
             toast({
                 title: "Login Successful!",
