@@ -3,7 +3,7 @@ import { ChatState } from '../../Context/ChatProvider'
 import { Box, Button, Stack, Text, useToast } from '@chakra-ui/react';
 import ChatLoading from './ChatLoading.js'
 import axios from 'axios';
-import { getSender } from '../../config/ChatLogin.js';
+import { getSender } from '../../config/ChatLogic.js';
 import GroupChatModal from './GroupChatModal.js';
 
 const MyChats = ({ fetchAgain }) => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react';
-import { getSender, getSenderFull } from '../../config/ChatLogin';
+import { getSender, getSenderFull } from '../../config/ChatLogic';
 import ProfileModal from './ProfileModal';
 import UpdateGroupChatModal from './UpdateGroupChatModal';
 import axios from 'axios';

@@ -8,7 +8,7 @@ import { Effect } from "react-notification-badge";
 import ChatLoading from './ChatLoading.js'
 import UserListItem from '../UserAvatar/UserListItem.js'
 import axios from 'axios'
-import { getSender } from '../../config/ChatLogin.js'
+import { getSender } from '../../config/ChatLogic.js'
 
 const SideDrawer = () => {
 
