@@ -56,7 +56,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                 }
             }
 
-            const { data } = await axios.put("http://localhost:5000/api/chat/groupadd", {
+            const { data } = await axios.put(`https://chatsphere-9e7n.onrender.com/api/chat/groupadd`, {
                 chatId: selectedChat._id,
                 userId: userToAdd._id,
             },
@@ -101,7 +101,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                 }
             }
 
-            const { data } = await axios.put("http://localhost:5000/api/chat/groupremove", {
+            const { data } = await axios.put(`https://chatsphere-9e7n.onrender.com/api/chat/groupremove`, {
                 chatId: selectedChat._id,
                 userId: userToRemove._id,
             },
@@ -140,7 +140,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                 }
             }
 
-            const { data } = await axios.put("http://localhost:5000/api/chat/rename", {
+            const { data } = await axios.put(`https://chatsphere-9e7n.onrender.com/api/chat/rename`, {
                 chatId: selectedChat._id,
                 newChatName: groupChatName,
             },
@@ -180,7 +180,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         try {
             setLoading(true)
 
-            const { data } = await axios.get(`http://localhost:5000/api/user?search=${query}`, {
+            const { data } = await axios.get(`https://chatsphere-9e7n.onrender.com/api/user?search=${query}`, {
                 headers: {
                     Authorization: `Bearer ${user.data.accessToken}`,
                     'Content-Type': 'application/json',

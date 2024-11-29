@@ -46,7 +46,7 @@ const SideDrawer = () => {
             setLoading(true)
 
 
-            const response = await axios.get(`http://localhost:5000/api/user?search=${search}`, {
+            const response = await axios.get(`https://chatsphere-9e7n.onrender.com/api/user?search=${search}`, {
                 headers: {
                     Authorization: `Bearer ${user.data.accessToken}`,
                     'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const SideDrawer = () => {
             };
 
             const response = await axios.post(
-                'http://localhost:5000/api/chat',
+                `https://chatsphere-9e7n.onrender.com/api/chat`,
                 { userId },
                 config
             );

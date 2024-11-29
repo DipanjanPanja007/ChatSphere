@@ -16,7 +16,7 @@ const MyChats = ({ fetchAgain }) => {
             console.log(`user from hook: ${user}`);
 
             // allChatsData with the loggedIn User
-            const { data } = await axios.get("http://localhost:5000/api/chat", {
+            const { data } = await axios.get(`https://chatsphere-9e7n.onrender.com/api/chat`, {
                 headers: {
                     Authorization: `Bearer ${user.data.accessToken}`,
                     'Content-Type': 'application/json',
@@ -90,6 +90,7 @@ const MyChats = ({ fetchAgain }) => {
                         chats ? (
                             <Stack overflowY={"scroll"} > {
                                 chats.map((chat) => (
+
                                     <Box
                                         onClick={() => setSelectedChat(chat)}
                                         cursor="pointer"

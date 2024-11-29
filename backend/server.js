@@ -16,7 +16,7 @@ import cookieParser from 'cookie-parser';
 
 
 connectDb();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.URI;
 const app = express();
 app.use(bodyParser.json())
 app.use(cookieParser());
@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", (_, res) => {
-    res.send(`API is running at PORT ${PORT}...`)
+    res.send(`API is running at ${PORT}...`)
 });
 
 app.use("/api/user", userRouter);
@@ -44,7 +44,7 @@ app.use("/api/message", messageRoutes);
 app.use(notFound)
 app.use(errorHandler)
 
-const server = app.listen(PORT, console.log(`Server has started at PORT ${PORT}`));
+const server = app.listen("https://chatsphere-9e7n.onrender.com", console.log(`Server has started at PORT ${PORT}`));
 
 
 const io = new Server(server, {

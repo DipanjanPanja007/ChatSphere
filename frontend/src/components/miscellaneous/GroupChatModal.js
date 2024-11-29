@@ -10,7 +10,6 @@ const GroupChatModal = ({ children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [groupChatName, setGroupChatName] = useState();
     const [selectedUsers, setSelectedUsers] = useState([]);
-    const [search, setSearch] = useState();
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
@@ -18,7 +17,6 @@ const GroupChatModal = ({ children }) => {
     const { user, chats, setChats } = ChatState()
 
     const handelSearch = async (query) => {
-        setSearch(query)
         if (!query) {
             return;
         }
@@ -26,7 +24,7 @@ const GroupChatModal = ({ children }) => {
         try {
             setLoading(true)
 
-            const { data } = await axios.get(`http://localhost:5000/api/user?search=${query}`, {
+            const { data } = await axios.get(`https://chatsphere-9e7n.onrender.com/api/user?search=${query}`, {
                 headers: {
                     Authorization: `Bearer ${user.data.accessToken}`,
                     'Content-Type': 'application/json',
@@ -98,7 +96,7 @@ const GroupChatModal = ({ children }) => {
             return;
         }
         try {
-            const { data } = await axios.post(`http://localhost:5000/api/chat/group`,
+            const data = await axios.post(`https://chatsphere-9e7n.onrender.com/api/chat/group`,
                 {
                     groupName: groupChatName,
                     users: JSON.stringify(selectedUsers.map(user => user._id))
@@ -114,11 +112,10 @@ const GroupChatModal = ({ children }) => {
             if (!data) {
                 console.log("group chat is not created");
             }
-            console.log(data);
+            console.log(data.data.data);
 
-            setChats([data, ...chats]);
+            setChats([data.data.data, ...chats]);
 
-            onclose();
             toast({
                 title: `Group chat: ${groupChatName} is created`,
                 status: "success",
@@ -134,6 +131,7 @@ const GroupChatModal = ({ children }) => {
                 isClosable: true,
                 position: "top-middle"
             })
+
         }
     };
 
