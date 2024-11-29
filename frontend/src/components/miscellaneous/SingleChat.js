@@ -48,9 +48,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         selectedChatCompare = selectedChat;          // for notification/show logic...
     }, [selectedChat])
 
-    useEffect(() => {
-        console.log(notification, "-------------");
-    }, [notification])
+
 
 
 
@@ -123,7 +121,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     },
                     credentials: "include",
                 });
-                console.log(data);
 
                 socket.emit('new_message', data.data)
 
@@ -154,7 +151,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     Authorization: `Bearer ${user.data.accessToken}`
                 }
             });
-            // console.log(data);
             setMessages(data.data)
             setLoading(false)
             socket.emit("join_chat", selectedChat._id)

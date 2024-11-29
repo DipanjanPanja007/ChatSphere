@@ -20,7 +20,6 @@ const ChatProvider = ({ children }) => {
         if (!userInfo) {
             history.push("/")
         }
-        console.log("user in localstorage: ", userInfo);
         setUser(userInfo);
 
     }, [history]);

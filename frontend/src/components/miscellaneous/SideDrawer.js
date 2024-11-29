@@ -65,7 +65,6 @@ const SideDrawer = () => {
 
             setSearchResult(response.data.data.users);
             setLoading(false)
-            console.log(response)
 
         } catch (error) {
             toast({
@@ -94,9 +93,8 @@ const SideDrawer = () => {
                 config
             );
 
-            console.log("Access chat with 2nd person-response: ", response);
 
-            // console.log("chats : ", chats);
+
 
             if (!chats.find((c) => c._id === response.data._id)) setChats([response.data, ...chats])
 

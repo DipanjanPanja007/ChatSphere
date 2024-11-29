@@ -67,7 +67,6 @@ const GroupChatModal = ({ children }) => {
             return;
         }
         setSelectedUsers([...selectedUsers, userToAdd]);
-        // console.log(selectedUsers);
     };
 
 
@@ -112,7 +111,6 @@ const GroupChatModal = ({ children }) => {
             if (!data) {
                 console.log("group chat is not created");
             }
-            console.log(data.data.data);
 
             setChats([data.data.data, ...chats]);
 
@@ -136,7 +134,6 @@ const GroupChatModal = ({ children }) => {
     };
 
     useEffect(() => {
-        console.log('Selected Users:', selectedUsers);
     }, [selectedUsers]);
 
 

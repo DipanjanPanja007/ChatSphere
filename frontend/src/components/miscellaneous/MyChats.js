@@ -13,7 +13,6 @@ const MyChats = ({ fetchAgain }) => {
 
     const fetchChats = async () => {
         try {
-            console.log(`user from hook: ${user}`);
 
             // allChatsData with the loggedIn User
             const { data } = await axios.get(`https://chatsphere-9e7n.onrender.com/api/chat`, {
