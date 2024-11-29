@@ -18,12 +18,14 @@ const SideDrawer = () => {
     const [loadingChat, setLoadingChat] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { user, setSelectedChat, chats, setChats, notification, setNotification } = ChatState()
+    const { user, setUser, setSelectedChat, chats, setChats, notification, setNotification } = ChatState()
     const history = useHistory()
     const toast = useToast()
 
     const logoutHandler = () => {
+        setUser(null);
         localStorage.removeItem("userInfo");
+
         // document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         history.push('/')

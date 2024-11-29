@@ -69,7 +69,7 @@ const Signup = () => {
 
             // Handle success (e.g., redirect or show success message)
             toast({
-                title: "Registration Successful!",
+                title: "Registration Successful! Go to login",
                 status: "success",
                 duration: 5000,
                 isClosable: true,
@@ -85,7 +85,6 @@ const Signup = () => {
             document.getElementById("profilePic").value = ""
 
             setLoading(false)
-            history.push("/chats")
 
         } catch (error) {
             console.log("error: ", error)
