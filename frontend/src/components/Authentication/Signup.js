@@ -53,7 +53,7 @@ const Signup = () => {
 
         setLoading(true);
         try {
-            const response = await fetch(`https://chatsphere-9e7n.onrender.com/api/user/`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/user/`, {
                 method: 'POST',
                 credentials: "include",
                 body: formData,

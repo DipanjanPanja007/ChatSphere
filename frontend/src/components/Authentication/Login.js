@@ -31,7 +31,7 @@ const Login = () => {
             });
             return;
         }
-        console.log(`email: ${info.email}, pass: ${info.password}`);
+        // console.log(`email: ${info.email}, pass: ${info.password}`);
 
 
         const data = {
@@ -41,7 +41,8 @@ const Login = () => {
 
         setLoading(true);
         try {
-            const response = await fetch(`https://chatsphere-9e7n.onrender.com/api/user/login`, {
+
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Set content type to JSON
@@ -58,10 +59,6 @@ const Login = () => {
 
             localStorage.setItem("userInfo", JSON.stringify(responseData));
 
-            // localStorage.setItem("testItem", "testValue");
-            // console.log(localStorage.getItem("testItem")); // should return "testValue"
-
-
             // console.log(`responseData : ${responseData}`);
 
             if (!response.ok) {
@@ -74,7 +71,6 @@ const Login = () => {
                 });
                 throw new Error(responseData.message || "Failed to register");
             }
-            console.log("response created");
 
             setUser(responseData)
 

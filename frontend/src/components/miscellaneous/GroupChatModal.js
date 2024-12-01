@@ -24,7 +24,7 @@ const GroupChatModal = ({ children }) => {
         try {
             setLoading(true)
 
-            const { data } = await axios.get(`https://chatsphere-9e7n.onrender.com/api/user?search=${query}`, {
+            const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URI}/api/user?search=${query}`, {
                 headers: {
                     Authorization: `Bearer ${user.data.accessToken}`,
                     'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ const GroupChatModal = ({ children }) => {
             return;
         }
         try {
-            const data = await axios.post(`https://chatsphere-9e7n.onrender.com/api/chat/group`,
+            const data = await axios.post(`${process.env.REACT_APP_BACKEND_URI}/api/chat/group`,
                 {
                     groupName: groupChatName,
                     users: JSON.stringify(selectedUsers.map(user => user._id))

@@ -10,7 +10,7 @@ import io from "socket.io-client"
 // import Lottie from 'react-lottie'
 // import animationData from '../animation/typing.json'
 
-const ENDPOINT = "https://chatsphere-9e7n.onrender.com";
+const ENDPOINT = process.env.REACT_APP_BACKEND_URI;
 let socket, selectedChatCompare;
 
 // const defaultOptions = {
@@ -111,7 +111,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             socket.emit("stop_typing", selectedChat._id)
             try {
                 setNewMessage("")
-                const { data } = await axios.post(`https://chatsphere-9e7n.onrender.com/api/message`, {
+                const { data } = await axios.post(`${process.env.REACT_APP_BACKEND_URI}/api/message`, {
                     content: newMessage,
                     chatId: selectedChat._id,
                 }, {
@@ -146,7 +146,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
         try {
             setLoading(true)
-            const { data } = await axios.get(`https://chatsphere-9e7n.onrender.com/api/message/${selectedChat._id}`, {
+            const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URI}/api/message/${selectedChat._id}`, {
                 headers: {
                     Authorization: `Bearer ${user.data.accessToken}`
                 }

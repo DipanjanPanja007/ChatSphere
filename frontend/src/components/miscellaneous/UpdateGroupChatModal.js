@@ -12,7 +12,6 @@ import UserListItem from '../UserAvatar/UserListItem.js';
 const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [groupChatName, setGroupChatName] = useState();
-    const [search, setSearch] = useState();
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
     const [renameLoading, setRenameLoading] = useState(false);
@@ -56,7 +55,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                 }
             }
 
-            const { data } = await axios.put(`https://chatsphere-9e7n.onrender.com/api/chat/groupadd`, {
+            const { data } = await axios.put(`${process.env.REACT_APP_BACKEND_URI}/api/chat/groupadd`, {
                 chatId: selectedChat._id,
                 userId: userToAdd._id,
             },
@@ -101,7 +100,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                 }
             }
 
-            const { data } = await axios.put(`https://chatsphere-9e7n.onrender.com/api/chat/groupremove`, {
+            const { data } = await axios.put(`${process.env.REACT_APP_BACKEND_URI}/api/chat/groupremove`, {
                 chatId: selectedChat._id,
                 userId: userToRemove._id,
             },
@@ -140,7 +139,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                 }
             }
 
-            const { data } = await axios.put(`https://chatsphere-9e7n.onrender.com/api/chat/rename`, {
+            const { data } = await axios.put(`${process.env.REACT_APP_BACKEND_URI}/api/chat/rename`, {
                 chatId: selectedChat._id,
                 newChatName: groupChatName,
             },
@@ -180,7 +179,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         try {
             setLoading(true)
 
-            const { data } = await axios.get(`https://chatsphere-9e7n.onrender.com/api/user?search=${query}`, {
+            const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URI}/api/user?search=${query}`, {
                 headers: {
                     Authorization: `Bearer ${user.data.accessToken}`,
                     'Content-Type': 'application/json',

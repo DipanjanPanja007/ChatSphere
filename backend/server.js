@@ -1,5 +1,5 @@
 import dotenv from "dotenv"
-dotenv.config({ path: "./.env" });
+dotenv.config({ path: ".env" });
 import express from "express";
 import cors from "cors";
 import bodyParser from 'body-parser';
@@ -44,7 +44,7 @@ app.use("/api/message", messageRoutes);
 app.use(notFound)
 app.use(errorHandler)
 
-const server = app.listen("https://chatsphere-9e7n.onrender.com", console.log(`Server has started at PORT ${PORT}`));
+const server = app.listen(PORT, console.log(`Server has started at PORT ${PORT}`));
 
 
 const io = new Server(server, {

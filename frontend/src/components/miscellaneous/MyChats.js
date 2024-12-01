@@ -15,7 +15,7 @@ const MyChats = ({ fetchAgain }) => {
         try {
 
             // allChatsData with the loggedIn User
-            const { data } = await axios.get(`https://chatsphere-9e7n.onrender.com/api/chat`, {
+            const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URI}/api/chat`, {
                 headers: {
                     Authorization: `Bearer ${user.data.accessToken}`,
                     'Content-Type': 'application/json',
