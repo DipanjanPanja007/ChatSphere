@@ -8,18 +8,20 @@ import UserBadgeItem from '../UserAvatar/UserBadgeItem.js';
 const GroupChatModal = ({ children }) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [search, setSearch] = useState("")
     const [groupChatName, setGroupChatName] = useState();
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
 
-    const { user, chats, setChats } = ChatState()
+    const { user, chats, setChats, setSelectedChat } = ChatState()
 
     const handelSearch = async (query) => {
         if (!query) {
             return;
         }
+        setSearch(query)
 
         try {
             setLoading(true)
@@ -121,6 +123,17 @@ const GroupChatModal = ({ children }) => {
                 isClosable: true,
                 position: "top-middle"
             })
+
+            if (data) {
+                // Clear the input fields and selected users
+                setGroupChatName("");
+                setSearchResult([]);
+                setSelectedUsers([]);
+            }
+
+            // // new created groupchat is selected if reqd........
+            // setSelectedChat(data.data.data)
+
         } catch (error) {
             toast({
                 title: "Error occoured while creating group chat",
@@ -154,10 +167,18 @@ const GroupChatModal = ({ children }) => {
 
                     <ModalBody display={"flex"} flexDir={"column"} alignItems={"center"} >
                         <FormControl>
-                            <Input placeholder='Chat Name' marginBottom={"2rem"} onChange={(e) => setGroupChatName(e.target.value)} />
+                            <Input
+                                placeholder='Chat Name'
+                                marginBottom={"2rem"}
+                                value={groupChatName}
+                                onChange={(e) => setGroupChatName(e.target.value)} />
                         </FormControl>
                         <FormControl>
-                            <Input placeholder='Add Users ....' marginBottom={"1rem"} onChange={(e) => handelSearch(e.target.value)} />
+                            <Input
+                                placeholder='Add Users ....'
+                                marginBottom={"1rem"}
+                                value={searchResult.length ? search : ""}
+                                onChange={(e) => handelSearch(e.target.value)} />
                         </FormControl>
                         <Box display={"flex"} flexWrap={"wrap"} justifyContent={"space-around"} >
                             {

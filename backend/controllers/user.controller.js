@@ -199,7 +199,7 @@ const allUsers = asyncHandler(async (req, res) => {
         .find({ _id: { $ne: req.user._id } })
         .select("-password")
 
-    console.log(users);
+    // console.log(users);
 
     // step#3: send users object. If not found, send empty object
     return res
