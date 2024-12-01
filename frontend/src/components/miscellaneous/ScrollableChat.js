@@ -19,8 +19,10 @@ const ScrollableChat = ({ messages }) => {
                 {messages &&
                     messages.map((currMessage, index) => (
                         <div style={{ display: "flex" }} key={currMessage._id}>
-                            {(isLastMessage(messages, index, user.data.user._id) ||
-                                isSameSender(messages, currMessage, index, user.data.user._id)) && (
+                            {(
+                                (currMessage.sender._id !== user.data.user._id) && (index === messages.length - 1 ||
+                                    messages[index + 1].sender._id !== currMessage.sender._id)
+                            ) && (
                                     <Tooltip
                                         label={currMessage.sender.name}
                                         placement="bottom-start"
