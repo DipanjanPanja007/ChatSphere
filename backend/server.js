@@ -15,7 +15,7 @@ import cookieParser from 'cookie-parser';
 
 
 connectDb();
-const PORT = process.env.URI;
+const PORT = process.env.PORT;
 const app = express();
 app.use(bodyParser.json())
 app.use(cookieParser());
