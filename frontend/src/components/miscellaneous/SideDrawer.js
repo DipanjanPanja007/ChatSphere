@@ -3,8 +3,6 @@ import React, { useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import ProfileModal from './ProfileModal'
 import { useHistory } from 'react-router-dom'
-import NotificationBadge from "react-notification-badge";
-import { Effect } from "react-notification-badge";
 import ChatLoading from './ChatLoading.js'
 import UserListItem from '../UserAvatar/UserListItem.js'
 import axios from 'axios'
@@ -139,11 +137,12 @@ const SideDrawer = () => {
                 <div>
                     <Menu>
                         <MenuButton p={1}>
-                            <NotificationBadge
-                                count={notification.length}
-                                effect={Effect.SCALE}
-                            />
                             <i class="fa-solid fa-bell"></i>
+                            {
+                                notification.length ?
+                                    (<span>&#40;{notification.length}&#41;</span>)
+                                    : (<></>)
+                            }
                         </MenuButton>
                         <MenuList paddingLeft={2}>
                             {
@@ -158,7 +157,6 @@ const SideDrawer = () => {
                                             setSelectedChat(noti.chat);
                                             setNotification(notification.filter((n) => n !== noti));
                                         }}
-                                        onMouseOver={console.log("hi")}
                                     >
                                         {
                                             noti.chat.isGroupChat ?
